@@ -18,6 +18,8 @@ $ docker-compose up -d
 ```
 
 # Why use Enmotech Images?
+// TODO@kamusis
+云和恩墨在openGuass的核心基础上，为周边增加了全套工具集。使用云和恩墨的openGauss容器镜像，可以获得正式的服务支持。
 
 # Supported tags and respective `Dockerfile` links
 
@@ -43,3 +45,4 @@ $ docker run \
 
 ## Setting up a streaming replication
 // TODO@lee1057
+// 完成创建主从高可用架构
