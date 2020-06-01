@@ -1,4 +1,5 @@
 # What is openGauss
+// TODO@kamusis 
 > copy contents from openGauss official site
 
 [https://opengauss.com/](https://opengauss.com/)
@@ -41,3 +42,4 @@ $ docker run \
 ```
 
 ## Setting up a streaming replication
+// TODO@lee1057
