@@ -1,6 +1,6 @@
 # What is openGauss
-// TODO@kamusis 
-> copy contents from openGauss official site
+// TODO@kamusis
+> copy contents from openGauss official site, should be completed after 2020/6/30
 
 [https://opengauss.com/](https://opengauss.com/)
 
