@@ -1,7 +1,7 @@
 # 快速参考
-- **维护者**:
+- **维护者**：
 [Enmotech OpenSource Team](https://github.com/enmotech)
-- **哪里可以获取帮助**:
+- **哪里可以获取帮助**：
 [墨天轮-openGauss](https://www.modb.pro/openGauss)
 
 # 支持的tags和 `Dockerfile`链接
@@ -11,7 +11,7 @@
 # 关于openGauss
 openGauss是一款开源关系型数据库管理系统，采用木兰宽松许可证v2发行。openGauss内核早期源自PostgreSQL，深度融合华为在数据库领域多年的经验，结合企业级场景需求，持续构建竞争力特性。同时openGauss也是一个开源、免费的数据库平台，鼓励社区贡献、合作。
 
-[openGauss社区官方网站](https://opengauss.org/)
+openGauss社区官方网站：[https://opengauss.org/](https://opengauss.org/)
 
 
 # 云和恩墨openGuass镜像的特点
