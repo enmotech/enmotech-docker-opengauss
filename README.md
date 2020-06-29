@@ -1,3 +1,12 @@
+# 快速参考
+- **维护者**:
+[Enmotech OpenSource Team](https://github.com/enmotech)
+- **哪里可以获取帮助**:
+[墨天轮-openGauss](https://www.modb.pro/openGauss)
+
+# 支持的tags和 `Dockerfile`链接
+-	[`1.0.0`, `latest`](https://github.com/docker-library/postgres/blob/88173efa530f1a174a7ea311c5b6ee5e383f68bd/12/Dockerfile)
+
 # What is openGauss
 // TODO@kamusis
 > copy contents from openGauss official site, should be completed after 2020/6/30
