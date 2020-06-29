@@ -1,32 +1,45 @@
-# Audit lee
-# Version 1.0
-FROM scratch
-ADD centos-7-docker.tar.xz /
-ADD Python-3.6.5.tar.xz /usr/local/
-LABEL org.label-schema.schema-version="1.0" \
-    org.label-schema.name="CentOS Base Image" \
-    org.label-schema.vendor="CentOS" \
-    org.label-schema.license="GPLv2" \
-    org.label-schema.build-date="20181204"
-RUN yum install -y wget openssl-devel bzip2-devel expat-devel gdbm-devel readline-devel sqlite-devel gcc gcc-c++ make telnet openssh-clients openssh-server net-tools&& \
-     swapoff -a && \
-     /usr/local/Python-3.6.5/configure --prefix=/usr/local/python3 && \
-     make && make install && \
-     rm -f /usr/bin/python && rm -f /usr/local/python3/bin/pip3  && ln -s /usr/local/python3/bin/python3  /usr/bin/python && \
-     ln -s /usr/local/python3/bin/pip3  /usr/bin/pip3  && \
-     sed -i "s/\/usr\/bin\/python/\/usr\/bin\/python2/g" /usr/bin/yum && \ 
-     sed -i "s/\/usr\/bin\/python/\/usr\/bin\/python2/g" /usr/libexec/urlgrabber-ext-down && \ 
-     mkdir -p /opt/software/openGauss  && \
-     chmod 755 -R /opt/software
-COPY clusterconfig.xml /opt/software/openGauss/
-ADD openGauss-1.0.0-CentOS-64bit.tar.gz /opt/software/openGauss/
-ADD libpython3.6m.so.1.0 /usr/lib64/libpython3.6m.so.1.0
-CMD systemctl start sshd
-RUN groupadd dbgrp  && useradd  omm -g dbgrp -G dbgrp && echo "123456" |passwd --stdin omm && \
-    sed -i "s/enmotest/$HOSTNAME/g" /opt/software/openGauss/clusterconfig.xml && \ 
-    /opt/software/openGauss/script/gs_preinstall -U omm -G dbgrp -X /opt/software/openGauss/clusterconfig.xml --non-interactive && \
-    su - omm -c "sed -i 's/shared_buffers = 1GB/shared_buffers = 100MB/' /gaussdb/data/db1/postgresql.conf" && \
-    su - omm -c "sed -i 's/bulk_write_ring_size = 2GB/bulk_write_ring_size = 1GB/' /gaussdb/data/db1/postgresql.conf" && \
-    su - omm -c "sed -i 's/cstore_buffers = 1GB/cstore_buffers = 100MB/' /gaussdb/data/db1/postgresql.conf" && \
-    su - omm -c "/opt/software/openGauss/script/gs_install -X /opt/software/openGauss/clusterconfig.xml"
-EXPOSE  26000 26001 22
+FROM centos:7.6.1810
+
+# TODO 需要更加构建平台来选择文件
+COPY openGauss-1.0.0-CentOS-64bit.tar.bz2 .
+ENV LANG en_US.utf8
+# TODO 是否考虑时区
+
+#RUN yum install -y epel-release
+
+RUN set -eux; \
+    groupadd -g 70 omm; \
+    useradd -u 70 -g omm -d /home/omm omm; \
+    yum install -y bzip2 bzip2-devel curl libaio && \
+    mkdir -p /var/lib/opengauss && \
+    mkdir -p /usr/local/opengauss && \
+    tar -jxvf openGauss-1.0.0-CentOS-64bit.tar.bz2 -C /usr/local/opengauss && \
+    mkdir -p /var/run/opengauss && chown -R omm:omm /var/run/opengauss && chmod 2777 /var/run/opengauss && \
+    rm -rf openGauss-1.0.0-CentOS-64bit.tar.bz2 && yum clean all
+
+RUN set -eux; \
+    echo "export GAUSSHOME=/usr/local/opengauss"  >> /home/omm/.bashrc && \
+    echo "export PATH=\$GAUSSHOME/bin:\$PATH " >> /home/omm/.bashrc && \
+    echo "export LD_LIBRARY_PATH=\$GAUSSHOME/lib:\$LD_LIBRARY_PATH" >> /home/omm/.bashrc
+
+ENV GOSU_VERSION 1.12
+RUN set -eux; \
+    gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+    && curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64" \
+    && curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64.asc" \
+    && gpg --verify /usr/local/bin/gosu.asc \
+    && rm /usr/local/bin/gosu.asc \
+    && rm -r /root/.gnupg/ \
+    && chmod +x /usr/local/bin/gosu
+
+RUN mkdir /docker-entrypoint-initdb.d
+
+ENV PGDATA /var/lib/opengauss/data
+
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN ln -s /usr/local/bin/docker-entrypoint.sh / # backwards compat
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+EXPOSE 5432
+CMD ["gaussdb"]
