@@ -13,6 +13,7 @@ openGauss是一款开源关系型数据库管理系统，采用木兰宽松许�
 
 openGauss社区官方网站：[https://opengauss.org/](https://opengauss.org/)
 
+![logo](https://github.com/enmotech/enmotech-docker-opengauss/blob/master/origin-opengauss-text.png)
 
 # 云和恩墨openGuass镜像的特点
 * 云和恩墨会最紧密跟踪openGauss的源码变化，第一时间发布镜像的新版本。
