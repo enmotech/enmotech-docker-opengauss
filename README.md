@@ -32,7 +32,7 @@ $ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=secretpassword
 为了更灵活的使用openGuass镜像，可以设置额外的参数。未来我们会扩充更多的可控制参数，当前版本支持以下变量的设定。
 
 ### `GS_PASSWORD`
-在你使用openGauss镜像的时候，必须设置该参数。该参数值不能为空或者不定义。该参数设置了openGauss数据库的超级用户omm以及测试用户enmotest的密码。openGauss安装时默认会创建omm超级用户，该用户名暂时无法修改。
+在你使用openGauss镜像的时候，必须设置该参数。该参数值不能为空或者不定义。该参数设置了openGauss数据库的超级用户omm以及测试用户gaussdb的密码。openGauss安装时默认会创建omm超级用户，该用户名暂时无法修改。测试用户gaussdb是在[docker-entrypoint.sh](https://github.com/enmotech/enmotech-docker-opengauss/blob/master/1.0.0/docker-entrypoint.sh)中自定义创建的用户。
 
 openGauss镜像配置了本地信任机制，因此在容器内连接数据库无需密码，但是如果要从容器外部（其它主机或者其它容器）连接则必须要输入密码。
 
