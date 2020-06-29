@@ -46,7 +46,7 @@ $ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=secretpassword
 ```
 在上述命令正常启动容器数据库之后，可以通过外部的gsql进行数据库访问。
 ```console
-$ gsql -d postgres -U omm -W'secretpassword@123' -h your-host-ip -p8888
+$ gsql -d postgres -U gaussdb -W'secretpassword@123' -h your-host-ip -p8888
 ```
 
 
