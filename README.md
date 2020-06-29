@@ -64,6 +64,7 @@ $  docker run --name opengauss --privileged=true -d -e GS_PASSWORD=secretpasswor
 
 # License
 Copyright (c) 2011-2020 Enmotech
+
 许可证协议遵循GPL v3.0，你可以从下方获取协议的详细内容。
 
     https://github.com/enmotech/enmotech-docker-opengauss/blob/master/LICENSE
