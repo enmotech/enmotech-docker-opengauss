@@ -32,20 +32,19 @@ file_env() {
 
 # check to see if this file is being run or sourced from another script
 _is_sourced() {
-	# https://unix.stackexchange.com/a/215279
 	[ "${#FUNCNAME[@]}" -ge 2 ] \
 		&& [ "${FUNCNAME[0]}" = '_is_sourced' ] \
 		&& [ "${FUNCNAME[1]}" = 'source' ]
 }
 
-# used to create initial postgres directories and if run as root, ensure ownership to the "postgres" user
+# used to create initial opengauss directories and if run as root, ensure ownership to the omm user
 docker_create_db_directories() {
 	local user; user="$(id -u)"
 
 	mkdir -p "$PGDATA"
 	chmod 700 "$PGDATA"
 
-	# ignore failure since it will be fine when using the image provided directory; see also https://github.com/docker-library/postgres/pull/289
+	# ignore failure since it will be fine when using the image provided directory;
 	mkdir -p /var/run/opengauss || :
 	chmod 775 /var/run/opengauss || :
 
@@ -71,7 +70,6 @@ docker_create_db_directories() {
 # this is also where the database user is created, specified by `GS_USER` env
 docker_init_database_dir() {
 	# "initdb" is particular about the current user existing in "/etc/passwd", so we use "nss_wrapper" to fake that if necessary
-	# see https://github.com/docker-library/postgres/pull/253, https://github.com/docker-library/postgres/issues/359, https://cwrap.org/nss_wrapper.html
 	if ! getent passwd "$(id -u)" &> /dev/null && [ -e /usr/lib/libnss_wrapper.so ]; then
 		export LD_PRELOAD='/usr/lib/libnss_wrapper.so'
 		export NSS_WRAPPER_PASSWD="$(mktemp)"
@@ -148,8 +146,6 @@ docker_process_init_files() {
 	for f; do
 		case "$f" in
 			*.sh)
-				# https://github.com/docker-library/postgres/issues/450#issuecomment-393167936
-				# https://github.com/docker-library/postgres/pull/452
 				if [ -x "$f" ]; then
 					echo "$0: running $f"
 					"$f"
@@ -185,9 +181,9 @@ docker_process_sql() {
 # uses environment variables for input: GS_DB
 docker_setup_db() {
 	if [ "$GS_DB" != 'postgres' ]; then
-		GS_DB= docker_process_sql --dbname postgres --set db="$GS_DB" <<-'EOSQL'
+		GS_DB= docker_process_sql --dbname postgres --set db="$GS_DB" --set passwd="$GS_PASSWORD" <<-'EOSQL'
 			CREATE DATABASE :"db" ;
-			create user enmotest with login password 'enmo@123';
+			create user gaussdb with login password :"passwd" ;
 
 		EOSQL
 		echo
@@ -207,7 +203,7 @@ docker_setup_env() {
 	: "${GS_HOST_AUTH_METHOD:=md5}"
 
 	declare -g DATABASE_ALREADY_EXISTS
-	# look specifically for PG_VERSION, as it is expected in the DB dir
+	# look specifically for OG_VERSION, as it is expected in the DB dir
 	if [ -s "$PGDATA/PG_VERSION" ]; then
 		DATABASE_ALREADY_EXISTS='true'
 	fi
@@ -219,7 +215,6 @@ pg_setup_hba_conf() {
 		echo
 		if [ 'trust' = "$GS_HOST_AUTH_METHOD" ]; then
 			echo '# warning trust is enabled for all connections'
-			echo '# see https://www.postgresql.org/docs/12/auth-trust.html'
 		fi
 		echo "host all all 0.0.0.0/0 $GS_HOST_AUTH_METHOD"
 	} >> "$PGDATA/pg_hba.conf"
@@ -231,7 +226,6 @@ pg_setup_postgresql_conf() {
 		echo
 		if [ 'trust' = "$GS_HOST_AUTH_METHOD" ]; then
 			echo '# warning trust is enabled for all connections'
-			echo '# see https://www.postgresql.org/docs/12/auth-trust.html'
 		fi
 		echo "password_encryption_type = 0"
 		echo "listen_addresses = '*'"
