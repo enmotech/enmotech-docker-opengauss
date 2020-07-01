@@ -20,6 +20,9 @@ openGauss社区官方网站：[https://opengauss.org/](https://opengauss.org/)
 * 云和恩墨的云端数据库，虚拟机数据库以及容器版本数据库均会使用同样的初始化最佳实践配置，这样当您在应对各种不同需求时会有几乎相同的体验。
 * 云和恩墨会持续发布不同CPU架构（x86或者ARM）之上，不同操作系统的各种镜像
 
+**目前已经支持x86-64和ARM64两种架构，会根据您获取镜像时运行的机器架构自动判断。**
+- x86-64架构的openGuass运行在[CentOS7.6操作系统](https://www.centos.org/)中
+- ARM64架构的openGauss运行在[openEuler 20.03 LTS操作系统](https://openeuler.org/zh/)中
 
 # 如何使用本镜像
 
