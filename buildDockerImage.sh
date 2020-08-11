@@ -20,6 +20,12 @@ EOF
 
 # Validate packages
 checksumPackages() {
+if [ $arch = "amd64" ]; then
+    md5_file="md5_file_amd64"
+    else
+    md5_file="md5_file_arm64"
+fi
+
   if hash md5sum 2>/dev/null; then
     echo "Checking if required packages are present and valid..."   
     if ! md5sum -c "Checksum"; then
