@@ -28,7 +28,7 @@ fi
 
   if hash md5sum 2>/dev/null; then
     echo "Checking if required packages are present and valid..."   
-    if ! md5sum -c "Checksum"; then
+    if ! md5sum -c "$md5_file"; then
       echo "MD5 for required packages to build this image did not match!"
       echo "Make sure to download missing files in folder $VERSION."
       exit 1;
@@ -72,8 +72,6 @@ if [ $arch = "amd64" ]; then
     else
     DOCKERFILE="dockerfile_arm"
 fi
-
-DOCKERFILE="dockerfile"
 
 if [ "$#" -eq 0 ]; then
   usage;
