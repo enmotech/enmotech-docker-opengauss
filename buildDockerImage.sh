@@ -60,6 +60,13 @@ VERSION="1.0.0"
 SKIPMD5=0
 DOCKEROPS=""
 MIN_DOCKER_VERSION="17.09"
+arch=`case $(uname -m) in i386)   echo "386" ;; i686)   echo "386" ;; x86_64) echo "amd64";; aarch64)echo "arm64";; esac`
+if [ $arch = "amd64" ]; then
+    DOCKERFILE="dockerfile_amd"
+    else
+    DOCKERFILE="dockerfile_arm"
+fi
+
 DOCKERFILE="dockerfile"
 
 if [ "$#" -eq 0 ]; then
