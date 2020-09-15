@@ -99,12 +99,21 @@ docker_init_database_dir() {
 docker_verify_minimum_env() {
         # check password first so we can output the warning before postgres
         # messes it up
-        if [ "${#GS_PASSWORD}" -ge 100 ]; then
+        if [[ "$GS_PASSWORD" =~  ^(.{8,}).*$ ]] &&  [[ "$GS_PASSWORD" =~ ^(.*[a-z]+).*$ ]] && [[ "$GS_PASSWORD" =~ ^(.*[A-Z]).*$ ]] &&  [[ "$GS_PASSWORD" =~ ^(.*[0-9]).*$ ]] && [[ "$GS_PASSWORD" =~ ^(.*[#?!@$%^&*-]).*$ ]]; then
                 cat >&2 <<-'EOWARN'
 
-                        WARNING: The supplied GS_PASSWORD is 100+ characters.
+                        Message: The supplied GS_PASSWORD is meet requirements.
 
 EOWARN
+        else
+                 cat >&2 <<-'EOWARN'
+
+                        Error: The supplied GS_PASSWORD is not meet requirements.
+                        Please Check if the password contains uppercase, lowercase, numbers, special characters, and password length(8).
+                        At least one uppercase, lowercase, numeric, special character.
+                        Example: Enmo@123
+EOWARN
+       exit 1
         fi
         if [ -z "$GS_PASSWORD" ] && [ 'trust' != "$GS_HOST_AUTH_METHOD" ]; then
                 # The - option suppresses leading tabs but *not* spaces. :)
