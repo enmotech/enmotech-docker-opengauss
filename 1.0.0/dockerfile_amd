@@ -2,18 +2,22 @@ FROM centos:7.6.1810
 
 COPY openGauss-1.0.0-CentOS-64bit.tar.bz2 .
 COPY gosu-amd64 /usr/local/bin/gosu
+
 ENV LANG en_US.utf8
 
 #RUN yum install -y epel-release
 
 RUN set -eux; \
-    groupadd -g 70 omm; \
-    useradd -u 70 -g omm -d /home/omm omm; \
-    yum install -y bzip2 bzip2-devel curl libaio && \
+    yum install -y bzip2 bzip2-devel curl libaio&& \
+    groupadd -g 70 omm;  \
+    useradd -u 70 -g omm -d /home/omm omm;  \
     mkdir -p /var/lib/opengauss && \
     mkdir -p /usr/local/opengauss && \
+    mkdir -p /var/run/opengauss  && \
+    mkdir /docker-entrypoint-initdb.d && \
     tar -jxvf openGauss-1.0.0-CentOS-64bit.tar.bz2 -C /usr/local/opengauss && \
-    mkdir -p /var/run/opengauss && chown -R omm:omm /var/run/opengauss && chown -R omm:omm /usr/local/opengauss && chmod 2777 /var/run/opengauss && \
+    chown -R omm:omm /var/run/opengauss && chown -R omm:omm /usr/local/opengauss && chown -R omm:omm /var/lib/opengauss &&  chown -R omm:omm /docker-entrypoint-initdb.d && \ 
+    chmod 2777 /var/run/opengauss && \
     rm -rf openGauss-1.0.0-CentOS-64bit.tar.bz2 && yum clean all
 
 RUN set -eux; \
@@ -32,12 +36,11 @@ RUN set -eux; \
 #    && rm -r /root/.gnupg/ \
      chmod +x /usr/local/bin/gosu
 
-RUN mkdir /docker-entrypoint-initdb.d
 
 ENV PGDATA /var/lib/opengauss/data
 
 COPY entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh;ln -s /usr/local/bin/entrypoint.sh / # backwards compat
+RUN chmod 755 /usr/local/bin/entrypoint.sh;ln -s /usr/local/bin/entrypoint.sh / # backwards compat
 
 ENTRYPOINT ["entrypoint.sh"]
 
