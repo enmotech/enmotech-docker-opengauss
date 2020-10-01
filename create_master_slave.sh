@@ -66,7 +66,7 @@ docker run --network opengaussnetwork --ip $MASTER_IP --privileged=true \
 -e GS_PASSWORD=$GS_PASSWORD \
 -e NODE_NAME=$MASTER_NODENAME \
 -e REPL_CONN_INFO="replconninfo1 = 'localhost=$MASTER_IP localport=$MASTER_LOCAL_PORT localservice=$MASTER_HOST_PORT remotehost=$SLAVE_1_IP remoteport=$SLAVE_1_LOCAL_PORT remoteservice=$SLAVE_1_HOST_PORT'\n" \
-opengauss:$VERSION -M primary \
+enmotech/opengauss:$VERSION -M primary \
 || {
   echo ""
   echo "ERROR: OpenGauss Database Master Docker Container was NOT successfully created."
@@ -83,7 +83,7 @@ docker run --network opengaussnetwork --ip $SLAVE_1_IP --privileged=true \
 -e GS_PASSWORD=$GS_PASSWORD \
 -e NODE_NAME=$SLAVE_NODENAME \
 -e REPL_CONN_INFO="replconninfo1 = 'localhost=$SLAVE_1_IP localport=$SLAVE_1_LOCAL_PORT localservice=$SLAVE_1_HOST_PORT remotehost=$MASTER_IP remoteport=$MASTER_LOCAL_PORT remoteservice=$MASTER_HOST_PORT'\n" \
-opengauss:$VERSION -M standby \
+enmotech/opengauss:$VERSION -M standby \
 || {
   echo ""
   echo "ERROR: OpenGauss Database Slave1 Docker Container was NOT successfully created."
