@@ -74,7 +74,7 @@ $  docker run --name opengauss --privileged=true -d -e GS_PASSWORD=secretpasswor
 ```
 
 ## 创建主从复制的openGauss容器
-创建容器镜像后执行脚本 create_master_slave.sh自动创建openGauss主从架构。
+创建容器镜像后执行脚本 [create_master_slave.sh](https://github.com/enmotech/enmotech-docker-opengauss/blob/master/create_master_slave.sh)自动创建openGauss主从架构。
 该脚本有多个自定义参数并设定默认值。  
 OG_SUBNET (容器所在网段) [172.11.0.0/24]  
 GS_PASSWORD (定义数据库密码)[Enmo@123]  
