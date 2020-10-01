@@ -75,17 +75,17 @@ $  docker run --name opengauss --privileged=true -d -e GS_PASSWORD=secretpasswor
 
 ## 创建主从复制的openGauss容器
 创建容器镜像后执行脚本 create_master_slave.sh自动创建openGauss主从架构。
-该脚本有多个自定义参数并设定默认值。
-OG_SUBNET (容器所在网段) [172.11.0.0/24]
-GS_PASSWORD (定义数据库密码)[Enmo@123]
-MASTER_IP (主库IP)[172.11.0.101]
-SLAVE_1_IP (备库IP)[172.11.0.102]
-MASTER_HOST_PORT (主库数据库服务端口)[5432]
-MASTER_LOCAL_PORT (主库通信端口)[5434]
-SLAVE_1_HOST_PORT (备库数据库服务端口)[6432]
-SLAVE_1_LOCAL_PORT (备库通信端口)[6434]
-MASTER_NODENAME (主节点名称)[opengauss_master]
-SLAVE_NODENAME （备节点名称）[opengauss_slave1]
+该脚本有多个自定义参数并设定默认值。  
+OG_SUBNET (容器所在网段) [172.11.0.0/24]  
+GS_PASSWORD (定义数据库密码)[Enmo@123]  
+MASTER_IP (主库IP)[172.11.0.101]  
+SLAVE_1_IP (备库IP)[172.11.0.102]  
+MASTER_HOST_PORT (主库数据库服务端口)[5432]  
+MASTER_LOCAL_PORT (主库通信端口)[5434]  
+SLAVE_1_HOST_PORT (备库数据库服务端口)[6432]  
+SLAVE_1_LOCAL_PORT (备库通信端口)[6434]  
+MASTER_NODENAME (主节点名称)[opengauss_master]  
+SLAVE_NODENAME （备节点名称）[opengauss_slave1]  
 
 
 # License
