@@ -40,7 +40,7 @@ $ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=Enmo@123 enmot
 
 openGauss镜像配置了本地信任机制，因此在容器内连接数据库无需密码，但是如果要从容器外部（其它主机或者其它容器）连接则必须要输入密码。
 
-**openGauss的密码有复杂度要求，需要：密码长度8个字符以上，必须同时包含英文字母大小写，数字，以及特殊符号**
+**openGauss的密码有复杂度要求，需要：密码长度8个字符及以上，必须同时包含英文字母大小写，数字，以及特殊符号**
 
 ### `GS_NODENAME`
 
