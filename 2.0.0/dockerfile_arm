@@ -1,0 +1,49 @@
+FROM debian:10.9-slim
+
+ADD  openGauss-2.0.0-openEuler-64bit.tar.bz2 .
+COPY gosu-arm64 /usr/local/bin/gosu
+COPY wal2json.so /tmp
+
+ENV LANG en_US.utf8
+
+RUN set -eux; \
+    apt-get update && apt-get install -y \
+    libaio-dev \
+    bzip2 \
+    libkeyutils-dev \
+    locales \
+    libnuma-dev \
+    libreadline-dev && \
+    rm -rf /var/lib/apt/lists/*; \ 
+    groupadd -g 70 omm;  \
+    useradd -u 70 -g omm -d /home/omm -s /bin/bash omm;  \
+    mkdir -p /var/lib/opengauss && \
+    mkdir -p /usr/local/opengauss && \
+    mkdir -p /var/run/opengauss  && \
+    mkdir -p /home/omm && \
+    mkdir /docker-entrypoint-initdb.d && \
+    chown omm:omm /var/lib/opengauss /home/omm /var/run/opengauss /docker-entrypoint-initdb.d && \
+    cp /tmp/wal2json.so /usr/local/opengauss && \
+    sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+
+
+
+RUN set -eux; \
+    echo "export GAUSSHOME=/usr/local/opengauss"  >> /home/omm/.bashrc && \
+    echo "export PATH=\$GAUSSHOME/bin:\$PATH " >> /home/omm/.bashrc && \
+    echo "export LD_LIBRARY_PATH=\$GAUSSHOME/lib:\$LD_LIBRARY_PATH" >> /home/omm/.bashrc
+
+ENV GOSU_VERSION 1.12
+RUN set -eux; \
+     chmod +x /usr/local/bin/gosu && \
+     chown omm:omm /home/omm/.bashrc
+
+
+ENV PGDATA /var/lib/opengauss/data
+
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/entrypoint.sh;ln -s /usr/local/bin/entrypoint.sh / # backwards compat
+ENTRYPOINT ["entrypoint.sh"]
+EXPOSE 5432 
+USER omm
+CMD ["gaussdb"]
