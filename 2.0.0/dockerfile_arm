@@ -1,12 +1,13 @@
 FROM debian:10.9-slim
 
-ADD  openGauss-2.0.0-openEuler-64bit.tar.bz2 .
+COPY MogDB-2.0.0-openEuler-64bit.tar.bz2 /
 COPY gosu-arm64 /usr/local/bin/gosu
 COPY wal2json.so /tmp
 
 ENV LANG en_US.utf8
 
 RUN set -eux; \
+    apt-get update && apt install ca-certificates -y && echo "deb http://mirrors.163.com/debian/ buster main non-free contrib" > /etc/apt/sources.list && \
     apt-get update && apt-get install -y \
     libaio-dev \
     bzip2 \
@@ -22,7 +23,9 @@ RUN set -eux; \
     mkdir -p /var/run/opengauss  && \
     mkdir -p /home/omm && \
     mkdir /docker-entrypoint-initdb.d && \
-    chown omm:omm /var/lib/opengauss /home/omm /var/run/opengauss /docker-entrypoint-initdb.d && \
+    tar -xf MogDB-2.0.0-openEuler-64bit.tar.bz2 -C /usr/local/opengauss && \
+    chown -R omm:omm /var/lib/opengauss /home/omm /var/run/opengauss /docker-entrypoint-initdb.d /usr/local/opengauss && \
+    rm -rf /MogDB-2.0.0-openEuler-64bit.tar.bz2 && \
     cp /tmp/wal2json.so /usr/local/opengauss && \
     sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen && locale-gen
 
@@ -46,4 +49,4 @@ RUN chmod 755 /usr/local/bin/entrypoint.sh;ln -s /usr/local/bin/entrypoint.sh / 
 ENTRYPOINT ["entrypoint.sh"]
 EXPOSE 5432 
 USER omm
-CMD ["gaussdb"]
+CMD ["mogdb"]
