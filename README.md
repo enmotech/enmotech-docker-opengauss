@@ -5,7 +5,12 @@
 [墨天轮-openGauss](https://www.modb.pro/openGauss)
 
 # 支持的tags和 `Dockerfile`链接
--	[`1.0.0`,`1.0.1`, `latest`](https://github.com/enmotech/enmotech-docker-opengauss/blob/master/1.0.1/dockerfile_arm)
+- [`latest`](https://hub.docker.com/layers/enmotech/opengauss/latest/images/sha256-6b0dd1171fc3386d89aab4c8cb4af4253c500529d07a56e18d20ed31c6dc4001?context=explore)
+- [`2.0.1`](https://hub.docker.com/layers/enmotech/opengauss/2.0.1/images/sha256-e3b18ce17fe43cdfe030d353ff93636d4db8418365b6247a57dfbb280aaee699?context=explore)
+- [`2.0.0`](https://hub.docker.com/layers/enmotech/opengauss/2.0.0/images/sha256-2e43ab3306bf0300079726718d8b27304212eca5b49d0be418eec12d4f2ca105?context=explore)
+- [`1.1.0`](https://hub.docker.com/layers/enmotech/opengauss/1.1.0/images/sha256-004bfdb7c883d22b7731e14995c4a4ff1fe254f47cec3ddca088bea2fd133543?context=explore)
+- [`1.0.1`](https://hub.docker.com/layers/enmotech/opengauss/1.0.1/images/sha256-9e82b00802e8bd7a1b78344bbc77cc593303ca0b0c5bbb041192b360a5c89ccf?context=explore)
+- [`1.0.0`](https://hub.docker.com/layers/enmotech/opengauss/1.0.0/images/sha256-07e7a0e0c07df7c9151bd8038883e40546a9705b61b63373ebaf70dbc738c40c?context=explore)
 
 
 # 关于openGauss
@@ -13,7 +18,7 @@ openGauss是一款开源关系型数据库管理系统，采用木兰宽松许�
 
 openGauss社区官方网站：[https://opengauss.org/](https://opengauss.org/)
 
-![logo](https://github.com/enmotech/enmotech-docker-opengauss/blob/master/origin-opengauss-text.png)
+![logo](https://i.loli.net/2020/12/16/4xLt2QGOfcAgzKw.png)
 
 # 云和恩墨openGuass镜像的特点
 * 云和恩墨会最紧密跟踪openGauss的源码变化，第一时间发布镜像的新版本。
@@ -21,7 +26,13 @@ openGauss社区官方网站：[https://opengauss.org/](https://opengauss.org/)
 * 云和恩墨会持续发布不同CPU架构（x86或者ARM）之上，不同操作系统的各种镜像
 
 **目前已经支持x86-64和ARM64两种架构，会根据您获取镜像时运行的机器架构自动判断。**
-- x86-64架构的openGuass运行在[CentOS7.6操作系统](https://www.centos.org/)中
+
+从2.0版本开始（包括2.0版本）
+- x86-64架构的openGuass运行在[Ubuntu 18.04操作系统](https://ubuntu.com/)中
+- ARM64架构的openGauss运行在[Debian 10 操作系统](https://www.debian.org/)中
+
+在1.1.0版本之前（包括1.1.0版本）
+- x86-64架构的openGuass运行在[CentOS 7.6操作系统](https://www.centos.org/)中
 - ARM64架构的openGauss运行在[openEuler 20.03 LTS操作系统](https://openeuler.org/zh/)中
 
 # 如何使用本镜像
@@ -54,29 +65,34 @@ openGauss镜像配置了本地信任机制，因此在容器内连接数据库�
 指定数据库端口，默认为5432。
 
 ## 从容器外部连接容器数据库
-openGauss的默认监听启动在容器内的5432端口上，如果想要从容器外部访问数据库，则需要在`docker run`的时候指定`-p`参数。比如以下命令将允许使用8888端口访问容器数据库。
+openGauss的默认监听启动在容器内的5432端口上，如果想要从容器外部访问数据库，则需要在`docker run`的时候指定`-p`参数。比如以下命令将允许使用15432端口访问容器数据库。
 ```console
-$ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=Enmo@123 -p 8888:5432 enmotech/opengauss:latest
+$ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=Secretpassword@123 -p 15432:5432 enmotech/opengauss:latest
 ```
 在上述命令正常启动容器数据库之后，可以通过外部的gsql进行数据库访问。
 ```console
-$ gsql -d postgres -U gaussdb -W'Enmo@123' -h your-host-ip -p8888
+$ gsql -d postgres -U gaussdb -W'Secretpassword@123' -h your-host-ip -p15432
 ```
 
 
 ## 持久化存储数据
-容器一旦被删除，容器内的所有数据和配置也均会丢失，而从镜像重新运行一个容器的话，则所有数据又都是呈现在初始化状态，因此对于数据库容器来说，为了防止因为容器的消亡或者损坏导致的数据丢失，需要进行持久化存储数据的操作。通过在`docker run`的时候指定`-v`参数来实现。比如以下命令将会指定将openGauss的所有数据文件存储在宿主机的/enmotech/opengauss下。
+容器一旦被删除，容器内的所有数据和配置也均会丢失，而从镜像重新运行一个容器的话，则所有数据又都是呈现在初始化状态，因此对于数据库容器来说，为了防止因为容器的消亡或者损坏导致的数据丢失，需要进行持久化存储数据的操作。通过在`docker run`的时候指定`-v`参数来实现。比如以下命令将会指定将openGauss的所有数据文件存储在宿主机的/enmotech/opengauss下。`-u root`参数用于指定容器启动的时候以root用户执行脚本，否则会遇到没有权限创建数据文件目录的问题。
+
+注：如果使用podman，会有目标路径检查，需要预先创建宿主机目标路径。
 
 ```console
-$  docker run --name opengauss --privileged=true -d -e GS_PASSWORD=secretpassword@123 \
-    -v /enmotech/opengauss:/var/lib/opengauss \
+$ mkdir -p /enmotech/opengauss
+$ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=Secretpassword@123 \
+    -v /enmotech/opengauss:/var/lib/opengauss  -u root -p 15432:5432 \
     enmotech/opengauss:latest
 ```
 
 ## 创建主从复制的openGauss容器
-创建容器镜像后执行脚本 [create_master_slave.sh](https://github.com/enmotech/enmotech-docker-opengauss/blob/master/create_master_slave.sh)自动创建openGauss主从架构。
-该脚本有多个自定义参数并设定默认值。  
-OG_SUBNET (容器所在网段) [172.11.0.0/24]  
+1. 拉取容器镜像
+2. 运行脚本[create_master_slave.sh](https://github.com/enmotech/enmotech-docker-opengauss/blob/master/create_master_slave.sh)，按照提示输入所需参数，或者直接使用默认值，即可自动创建openGauss一主一备架构的两个容器。
+
+上述脚本有多个自定义参数，以下为这些参数的参数名称(解释)[默认值]。  
+> OG_SUBNET (容器所在网段) [172.11.0.0/24]  
 GS_PASSWORD (定义数据库密码)[Enmo@123]  
 MASTER_IP (主库IP)[172.11.0.101]  
 SLAVE_1_IP (备库IP)[172.11.0.102]  
@@ -87,9 +103,13 @@ SLAVE_1_LOCAL_PORT (备库通信端口)[6434]
 MASTER_NODENAME (主节点名称)[opengauss_master]  
 SLAVE_NODENAME （备节点名称）[opengauss_slave1]  
 
-### 测试用例
+### 使用示例
+#### 拉取镜像
 ```console
-# docker pull enmotech/opengauss:1.0.1
+# docker pull enmotech/opengauss:latest
+```
+#### 获取创建主备容器脚本并运行
+```console
 # wget https://raw.githubusercontent.com/enmotech/enmotech-docker-opengauss/master/create_master_slave.sh
 # chmod +x create_master_slave.sh 
 # ./create_master_slave.sh 
@@ -122,9 +142,10 @@ e5430f16948639ac6a681e7f7db5ebbce8bf40c576e17ae412a3003f27b8ea14
 OpenGauss Database Master Docker Container created.
 bcb688c551b15d34196c249fdf934e4b8140a9181d6dde809c957405ec1ed29a
 OpenGauss Database Slave1 Docker Container created.
+```
 
-验证主从状态
-
+#### 验证主从状态
+```
 # docker exec -it opengauss_master /bin/bash
 # su - omm
 Last login: Thu Oct  1 23:19:49 UTC 2020 on pts/0
@@ -161,7 +182,7 @@ No information
 ```
 
 # License
-Copyright (c) 2011-2020 Enmotech
+Copyright (c) 2011-2021 Enmotech
 
 许可证协议遵循GPL v3.0，你可以从下方获取协议的详细内容。
 
