@@ -1,6 +1,8 @@
 # 快速参考
 - **维护者**：
 [Enmotech OpenSource Team](https://github.com/enmotech)
+- **容器镜像下载地址**：
+[openGauss dockerhunb Repo](https://hub.docker.com/r/enmotech/opengauss)
 - **哪里可以获取帮助**：
 [墨天轮-openGauss](https://www.modb.pro/openGauss)
 
