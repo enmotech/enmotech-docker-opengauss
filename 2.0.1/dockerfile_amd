@@ -1,0 +1,47 @@
+FROM ubuntu:18.04
+
+ADD  MogDB-2.0.1-CentOS-64bit.tar.bz2 /usr/local/opengauss
+COPY gosu-amd64 /usr/local/bin/gosu
+COPY wal2json.so /tmp
+COPY Oracle_Functions_1.0.0.sql /tmp
+COPY Oracle_Views_1.0.0.sql /tmp
+
+ENV LANG en_US.utf8
+
+
+RUN set -eux; \
+    apt-get update && apt-get install -y \
+    libaio-dev \
+    libkeyutils-dev \
+    locales \
+    libreadline-dev && \
+    rm -rf /var/lib/apt/lists/*; \ 
+    ln -s /lib/x86_64-linux-gnu/libreadline.so.7 /lib/x86_64-linux-gnu/libreadline.so.6; \
+    groupadd -g 70 omm;  \
+    useradd -u 70 -g omm -m -s /bin/bash omm;  \
+    mkdir -p /var/lib/opengauss && \
+    mkdir -p /usr/local/opengauss && \
+    mkdir -p /var/run/opengauss  && \
+    mkdir /docker-entrypoint-initdb.d && \
+    chown omm:omm /var/lib/opengauss /home/omm /var/run/opengauss /docker-entrypoint-initdb.d && \
+    cp /tmp/wal2json.so /usr/local/opengauss && \
+    locale-gen en_US.UTF-8
+
+RUN set -eux; \
+    echo "export GAUSSHOME=/usr/local/opengauss"  >> /home/omm/.bashrc && \
+    echo "export PATH=\$GAUSSHOME/bin:\$PATH " >> /home/omm/.bashrc && \
+    echo "export LD_LIBRARY_PATH=\$GAUSSHOME/lib:\$LD_LIBRARY_PATH" >> /home/omm/.bashrc
+
+ENV GOSU_VERSION 1.12
+RUN set -eux; \
+     chmod +x /usr/local/bin/gosu
+
+
+ENV PGDATA /var/lib/opengauss/data
+
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/entrypoint.sh;ln -s /usr/local/bin/entrypoint.sh / # backwards compat
+ENTRYPOINT ["entrypoint.sh"]
+EXPOSE 5432
+CMD ["mogdb"]
+

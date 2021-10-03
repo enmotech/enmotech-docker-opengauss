@@ -1,0 +1,53 @@
+FROM debian:10.9-slim
+
+COPY MogDB-2.0.1-openEuler-64bit.tar.bz2 /
+COPY gosu-arm64 /usr/local/bin/gosu
+COPY wal2json.so /tmp
+COPY Oracle_Functions_1.0.0.sql /tmp
+COPY Oracle_Views_1.0.0.sql /tmp
+
+ENV LANG en_US.utf8
+
+RUN set -eux; \
+    apt-get update && apt install ca-certificates -y && echo "deb http://mirrors.163.com/debian/ buster main non-free contrib" > /etc/apt/sources.list && \
+    apt-get update && apt-get install -y \
+    libaio-dev \
+    bzip2 \
+    libkeyutils-dev \
+    locales \
+    libnuma-dev \
+    libreadline-dev && \
+    rm -rf /var/lib/apt/lists/*; \ 
+    groupadd -g 70 omm;  \
+    useradd -u 70 -g omm -m -s /bin/bash omm;  \
+    mkdir -p /var/lib/opengauss && \
+    mkdir -p /usr/local/opengauss && \
+    mkdir -p /var/run/opengauss  && \
+    mkdir /docker-entrypoint-initdb.d && \
+    tar -xf MogDB-2.0.1-openEuler-64bit.tar.bz2 -C /usr/local/opengauss && \
+    chown -R omm:omm /var/lib/opengauss /home/omm /var/run/opengauss /docker-entrypoint-initdb.d /usr/local/opengauss && \
+    rm -rf /openGauss-2.0.0-openEuler-64bit.tar.bz2 && \
+    cp /tmp/wal2json.so /usr/local/opengauss && \
+    sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+
+
+
+RUN set -eux; \
+    echo "export GAUSSHOME=/usr/local/opengauss"  >> /home/omm/.bashrc && \
+    echo "export PATH=\$GAUSSHOME/bin:\$PATH " >> /home/omm/.bashrc && \
+    echo "export LD_LIBRARY_PATH=\$GAUSSHOME/lib:\$LD_LIBRARY_PATH" >> /home/omm/.bashrc
+
+ENV GOSU_VERSION 1.12
+RUN set -eux; \
+     chmod +x /usr/local/bin/gosu && \
+     chown omm:omm /home/omm/.bashrc
+
+
+ENV PGDATA /var/lib/opengauss/data
+
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/entrypoint.sh;ln -s /usr/local/bin/entrypoint.sh / # backwards compat
+ENTRYPOINT ["entrypoint.sh"]
+EXPOSE 5432 
+
+CMD ["mogdb"]
