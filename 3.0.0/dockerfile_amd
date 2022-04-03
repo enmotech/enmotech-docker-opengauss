@@ -1,24 +1,30 @@
-FROM openeuler-20.03-lts:latest
+FROM ubuntu:18.04
 
-COPY openGauss-1.1.0-openEuler-64bit.tar.bz2 .
-COPY openEuler_aarch64.repo /etc/yum.repos.d/openEuler_aarch64.repo
+ADD  openGauss-Lite-3.0.0-CentOS-x86_64.bin /usr/local/opengauss
+
 ENV LANG en_US.utf8
 
-#RUN yum install -y epel-release
 
 RUN set -eux; \
-    yum install -y bzip2 curl libaio shadow tar&& \
-    groupadd -g 70 omm; \
-    useradd -u 70 -g omm -d /home/omm omm; \
+    apt-get update && apt-get install -y \
+    libaio-dev \
+    libkeyutils-dev \
+    locales \
+    wget \
+    vim  \
+    procps \
+    libreadline-dev && \
+    rm -rf /var/lib/apt/lists/*; \ 
+    ln -s /lib/x86_64-linux-gnu/libreadline.so.7 /lib/x86_64-linux-gnu/libreadline.so.6; \
+    groupadd -g 70 omm;  \
+    useradd -u 70 -g omm -m -s /bin/bash omm;  \
     mkdir -p /var/lib/opengauss && \
     mkdir -p /usr/local/opengauss && \
-    mkdir -p /var/run/opengauss  && \ 
+    mkdir -p /var/run/opengauss  && \
     mkdir /docker-entrypoint-initdb.d && \
-    tar -jxf openGauss-1.1.0-openEuler-64bit.tar.bz2 -C /usr/local/opengauss && \
     wget -P /usr/local/bin/ https://gitee.com/lee1002/gosu/attach_files/914780/download/gosu-amd64 -O /usr/local/bin/gosu && \
-    chown -R omm:omm /var/run/opengauss && chown -R omm:omm /usr/local/opengauss && chown -R omm:omm /var/lib/opengauss &&  chown -R omm:omm /docker-entrypoint-initdb.d && \ 
-    chmod 2777 /var/run/opengauss && \
-    rm -rf openGauss-1.1.0-openEuler-64bit.tar.bz2 && yum clean all
+    chown omm:omm /var/lib/opengauss /home/omm /var/run/opengauss /docker-entrypoint-initdb.d && \
+    locale-gen en_US.UTF-8
 
 RUN set -eux; \
     echo "export GAUSSHOME=/usr/local/opengauss"  >> /home/omm/.bashrc && \
@@ -34,8 +40,6 @@ ENV PGDATA /var/lib/opengauss/data
 
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/entrypoint.sh;ln -s /usr/local/bin/entrypoint.sh / # backwards compat
-
 ENTRYPOINT ["entrypoint.sh"]
-
-EXPOSE 5432 
+EXPOSE 5432
 CMD ["gaussdb"]

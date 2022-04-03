@@ -1,7 +1,6 @@
 FROM ubuntu:18.04
 
 ADD  openGauss-2.0.0-CentOS-64bit.tar.bz2 /usr/local/opengauss
-COPY gosu-amd64 /usr/local/bin/gosu
 COPY wal2json.so /tmp
 
 ENV LANG en_US.utf8
@@ -12,6 +11,7 @@ RUN set -eux; \
     libaio-dev \
     libkeyutils-dev \
     locales \
+    wget \
     libreadline-dev && \
     rm -rf /var/lib/apt/lists/*; \ 
     ln -s /lib/x86_64-linux-gnu/libreadline.so.7 /lib/x86_64-linux-gnu/libreadline.so.6; \
@@ -23,6 +23,7 @@ RUN set -eux; \
     mkdir -p /home/omm && \
     mkdir /docker-entrypoint-initdb.d && \
     chown omm:omm /var/lib/opengauss /home/omm /var/run/opengauss /docker-entrypoint-initdb.d && \
+    wget -P /usr/local/bin/ https://gitee.com/lee1002/gosu/attach_files/914780/download/gosu-amd64 -O /usr/local/bin/gosu && \
     cp /tmp/wal2json.so /usr/local/opengauss && \
     locale-gen en_US.UTF-8
 

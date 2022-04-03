@@ -114,7 +114,7 @@ if [ "$VERSION" == "12.1.0.2" ] || [ "$VERSION" == "11.2.0.2" ] || [ "$VERSION" 
 fi;
 
 # openGauss Database Image Name
-IMAGE_NAME="opengauss:$VERSION"
+IMAGE_NAME="enmotech/opengauss:$VERSION"
 
 # Go into version folder
 cd "$VERSION" || {
