@@ -10,6 +10,7 @@ ENV LANG en_US.utf8
 
 RUN set -eux; \
     apt-get update && apt-get install -y \
+    wget \
     libaio-dev \
     libkeyutils-dev \
     locales \
