@@ -30,6 +30,7 @@ RUN set -eux; \
     echo "export GAUSSHOME=/usr/local/opengauss"  >> /home/omm/.bashrc && \
     echo "export PATH=\$GAUSSHOME/bin:\$PATH " >> /home/omm/.bashrc && \
     echo "export LD_LIBRARY_PATH=\$GAUSSHOME/lib:\$LD_LIBRARY_PATH" >> /home/omm/.bashrc && \
+    echo "export PGDATA=/var/lib/opengauss/data" >> /home/omm/.bashrc && \
     wget -P /usr/local/bin/ https://gitee.com/lee1002/gosu/attach_files/944222/download/gosu-arm64 -O /usr/local/bin/gosu && \
     chmod +x /usr/local/bin/gosu && \
     chown omm:omm /home/omm/.bashrc && \
