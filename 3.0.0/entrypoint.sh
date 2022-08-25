@@ -81,11 +81,36 @@ docker_init_database_dir() {
                 set -- --xlogdir "$POSTGRES_INITDB_XLOGDIR" "$@"
         fi
 
+        cmdbase="gs_initdb --pwfile=<(echo "$GS_PASSWORD")"
+
         if [ -n "$GS_NODENAME" ]; then
-                eval 'gs_initdb --pwfile=<(echo "$GS_PASSWORD") --nodename=$GS_NODENAME --encoding=UTF-8 --locale=en_US.UTF-8 --dbcompatibility=PG -D $PGDATA'
+                cmdbase="$cmdbase --nodename=$GS_NODENAME"
         else
-                eval 'gs_initdb --pwfile=<(echo "$GS_PASSWORD") --nodename=gaussdb --encoding=UTF-8 --locale=en_US.UTF-8 --dbcompatibility=PG -D $PGDATA'
-        fi        
+                cmdbase="$cmdbase --nodename=gaussdb"
+        fi
+
+        if [ -n "$ENCODING" ]; then
+                cmdbase="$cmdbase --encoding=$ENCODING"
+        else
+                cmdbase="$cmdbase --encoding=UTF-8"
+        fi
+
+        if [ -n "$LOCALE" ]; then
+                cmdbase="$cmdbase --locale=$LOCALE"
+        else
+                cmdbase="$cmdbase --no-locale"
+        fi
+
+        if [ -n "$DBCOMPATIBILITY" ]; then
+                cmdbase="$cmdbase --dbcompatibility=$DBCOMPATIBILITY"
+        else
+                cmdbase="$cmdbase --dbcompatibility=PG"
+        fi
+
+        cmdbase="$cmdbase -D $PGDATA"
+
+        eval $cmdbase
+
         # unset/cleanup "nss_wrapper" bits
         if [ "${LD_PRELOAD:-}" = '/usr/lib/libnss_wrapper.so' ]; then
                 rm -f "$NSS_WRAPPER_PASSWD" "$NSS_WRAPPER_GROUP"
@@ -227,7 +252,7 @@ EOSQL
 # This should be called before any other functions
 docker_setup_env() {
         export GS_USER=omm
-        file_env 'GS_PASSWORD'
+        file_env 'GS_PASSWORD' 'Enmo@123'
 
         # file_env 'GS_USER' 'omm'
         file_env 'GS_DB' "$GS_USER"
@@ -262,9 +287,13 @@ opengauss_setup_postgresql_conf() {
         {
                 echo
                 if [ -n "$GS_PORT" ]; then
+                    echo "password_encryption_type = 1"
                     echo "port = $GS_PORT"
+                    echo "wal_level = logical"
                 else
                     echo '# use default port 5432'
+                    echo "password_encryption_type = 1"
+                    echo "wal_level = logical"
                 fi
 
                 if [ -n "$SERVER_MODE" ]; then
@@ -275,7 +304,9 @@ opengauss_setup_postgresql_conf() {
                     echo -e "$REPL_CONN_INFO"
                     if [ -n "$SYNCHRONOUS_STANDBY_NAMES" ]; then
                         echo "synchronous_standby_names=$SYNCHRONOUS_STANDBY_NAMES"
-                    fi        
+                    fi
+                else
+                    echo "listen_addresses = '*'"
                 fi
 
                 if [ -n "$OTHER_PG_CONF" ]; then
