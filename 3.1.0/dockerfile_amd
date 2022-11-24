@@ -1,0 +1,44 @@
+FROM ubuntu:20.04
+
+ADD openGauss-3.1.0-openEuler-64bit.tar.bz2 /usr/local/opengauss
+
+ENV LANG en_US.utf8
+ENV GAUSSLOG=/home/omm/pg_log
+
+RUN set -eux; \
+    apt-get update && apt-get install -y \
+    iputils-ping \
+    ncat \
+    libaio-dev \
+    libkeyutils-dev \
+    locales \
+    wget \
+    vim  \
+    procps \
+    libreadline-dev && \
+    rm -rf /var/lib/apt/lists/*; \
+    ln -s /lib/x86_64-linux-gnu/libreadline.so.8.0 /lib/x86_64-linux-gnu/libreadline.so.7; \
+    groupadd -g 70 omm;  \
+    useradd -u 70 -g omm -m -s /bin/bash omm;  \
+    mkdir -p /var/lib/opengauss && \
+    mkdir -p /var/run/opengauss  && \
+    mkdir /docker-entrypoint-initdb.d && \
+    echo "export GAUSSHOME=/usr/local/opengauss"  >> /home/omm/.profile && \
+    echo "export PATH=\$GAUSSHOME/bin:\$PATH " >> /home/omm/.profile && \
+    echo "export LD_LIBRARY_PATH=\$GAUSSHOME/lib:\$LD_LIBRARY_PATH" >> /home/omm/.profile && \
+    echo "export GAUSSLOG=/home/omm/pg_log" >> /home/omm/.profile && \
+    echo "export PGDATA=/var/lib/opengauss/data" >> /home/omm/.profile && \
+    wget -P /usr/local/bin/ https://gitee.com/lee1002/gosu/attach_files/914780/download/gosu-amd64 -O /usr/local/bin/gosu && \
+    chmod +x /usr/local/bin/gosu && \
+    chown omm:omm /var/lib/opengauss /home/omm /var/run/opengauss /docker-entrypoint-initdb.d  && \
+    locale-gen en_US.UTF-8
+
+
+ENV GOSU_VERSION 1.12
+ENV PGDATA /var/lib/opengauss/data
+
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/entrypoint.sh;ln -s /usr/local/bin/entrypoint.sh / # backwards compat
+ENTRYPOINT ["entrypoint.sh"]
+EXPOSE 5432
+CMD ["gaussdb"]
