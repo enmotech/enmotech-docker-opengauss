@@ -7,7 +7,9 @@
 [墨天轮-openGauss](https://www.modb.pro/openGauss)
 
 # 支持的tags和 `Dockerfile`链接
-- [`latest`](https://hub.docker.com/layers/enmotech/opengauss/latest/images/sha256-6b0dd1171fc3386d89aab4c8cb4af4253c500529d07a56e18d20ed31c6dc4001?context=explore)
+- [`latest`](https://hub.docker.com/layers/enmotech/opengauss/latest/images/sha256-5a2066b554b1da932dfcf093ecf65d198f44be334275b4fcdd1a8e1e12b0c514?context=explore)
+- [`3.1.0`](https://hub.docker.com/layers/enmotech/opengauss/3.1.0/images/sha256-5a2066b554b1da932dfcf093ecf65d198f44be334275b4fcdd1a8e1e12b0c514?context=explore) 
+- [`3.0.0`](https://hub.docker.com/layers/enmotech/opengauss/3.0.0/images/sha256-0b3796639366b63a55f4d524c44e76da9663378a998e2d9dd30dca70755249a3?context=explore)
 - [`2.0.1`](https://hub.docker.com/layers/enmotech/opengauss/2.0.1/images/sha256-e3b18ce17fe43cdfe030d353ff93636d4db8418365b6247a57dfbb280aaee699?context=explore)
 - [`2.0.0`](https://hub.docker.com/layers/enmotech/opengauss/2.0.0/images/sha256-2e43ab3306bf0300079726718d8b27304212eca5b49d0be418eec12d4f2ca105?context=explore)
 - [`1.1.0`](https://hub.docker.com/layers/enmotech/opengauss/1.1.0/images/sha256-004bfdb7c883d22b7731e14995c4a4ff1fe254f47cec3ddca088bea2fd133543?context=explore)
