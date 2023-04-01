@@ -7,7 +7,7 @@ set -Eeo pipefail
 #  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
 
 export GAUSSHOME=/usr/local/opengauss
-export PATH=$GAUSSHOME/bin:$GAUSSHOME/lib:$PATH
+export PATH=$GAUSSHOME/bin:$PATH
 export LD_LIBRARY_PATH=$GAUSSHOME/lib:$LD_LIBRARY_PATH
 export LANG=en_US.UTF-8
 
