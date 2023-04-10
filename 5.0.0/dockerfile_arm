@@ -1,15 +1,15 @@
-FROM ubuntu:20.04 as warehouse
+FROM debian:10.9-slim as warehouse
 
 RUN set -eux; \
         mkdir -p /warehouse/opengauss; \
-        sed -i "s/archive.ubuntu.com/mirrors.ustc.edu.cn/g" /etc/apt/sources.list; \
-        sed -i "s/security.ubuntu.com/mirrors.ustc.edu.cn/g" /etc/apt/sources.list; \
-        apt-get update && apt-get install --yes --no-install-recommends wget ca-certificates; \
-        wget --progress=bar:force:noscroll https://gitee.com/lee1002/gosu/attach_files/914780/download/gosu-amd64 -O /warehouse/gosu && chmod +x /warehouse/gosu; \
-        wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/3.1.1/x86_openEuler/openGauss-3.1.1-openEuler-64bit.tar.bz2 -O /warehouse/openGauss.tar.bz2; \
-        tar -xjf /warehouse/openGauss.tar.bz2 -C /warehouse/opengauss && rm -f /warehouse/openGauss.tar.bz2 && chmod -R 755 /warehouse/opengauss
+        sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list; \
+        sed -i 's/security.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list; \
+        apt-get update && apt-get install --yes --no-install-recommends wget bzip2 ca-certificates; \
+        wget --progress=bar:force:noscroll https://gitee.com/lee1002/gosu/attach_files/944222/download/gosu-arm64 -O /warehouse/gosu && chmod +x /warehouse/gosu; \
+        wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/5.0.0/arm/openGauss-5.0.0-openEuler-64bit.tar.bz2 -O /warehouse/openGauss.tar.bz2; \
+        tar -xjf /warehouse/openGauss.tar.bz2 -C /warehouse/opengauss && rm -f /warehouse/openGauss.tar.bz2 && chmod -R +rx /warehouse/opengauss
 
-FROM ubuntu:20.04
+FROM debian:10.9-slim
 
 ENV LANG en_US.utf8
 ENV GOSU_VERSION 1.12
@@ -17,11 +17,11 @@ ENV GAUSSLOG /home/omm/pg_log
 ENV PGDATA /var/lib/opengauss/data
 
 RUN set -eux; \
-    sed -i "s/archive.ubuntu.com/mirrors.ustc.edu.cn/g" /etc/apt/sources.list; \
-    sed -i "s/security.ubuntu.com/mirrors.ustc.edu.cn/g" /etc/apt/sources.list; \
+    sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list; \
+    sed -i 's/security.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list; \
     apt-get update && apt-get install --yes --no-install-recommends \
     ncat \
-    procps \
+    bzip2 \
     locales \
     iputils-ping \
     libaio-dev \
@@ -29,17 +29,16 @@ RUN set -eux; \
     libreadline-dev; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/* /tmp/*; \
-    ln -s /lib/x86_64-linux-gnu/libreadline.so.8 /lib/x86_64-linux-gnu/libreadline.so.7; \
     groupadd -g 70 omm; \
     useradd -u 70 -g omm -m -s /bin/bash omm; \
     mkdir -p /var/lib/opengauss; \
     mkdir -p /var/run/opengauss; \
     mkdir /docker-entrypoint-initdb.d; \
-    chown -R omm:omm /home/omm /var/lib/opengauss /var/run/opengauss /docker-entrypoint-initdb.d; \
+    chown omm:omm /var/lib/opengauss /home/omm /var/run/opengauss /docker-entrypoint-initdb.d; \
     echo "export GAUSSLOG=/home/omm/pg_log" >> /home/omm/.profile; \
     echo "export GAUSSHOME=/usr/local/opengauss" >> /home/omm/.profile; \
     echo "export PGDATA=/var/lib/opengauss/data" >> /home/omm/.profile; \
-    echo "export PATH=\$GAUSSHOME/bin:\$PATH" >> /home/omm/.profile; \
+    echo "export PATH=\$GAUSSHOME/bin:\$PATH " >> /home/omm/.profile; \
     echo "export LD_LIBRARY_PATH=\$GAUSSHOME/lib:\$LD_LIBRARY_PATH" >> /home/omm/.profile; \
     locale-gen en_US.UTF-8
 

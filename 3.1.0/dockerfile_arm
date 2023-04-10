@@ -1,46 +1,52 @@
-FROM debian:10.9-slim
-
-ADD openGauss-3.1.0-openEuler-64bit.tar.bz2 /usr/local/opengauss
-
-ENV LANG en_US.utf8
+FROM debian:10.9-slim as warehouse
 
 RUN set -eux; \
-#    apt-get update && apt install ca-certificates -y && echo "deb http://mirrors.163.com/debian/ buster main non-free contrib" > /etc/apt/sources.list && \
-    echo "deb http://mirrors.163.com/debian/ buster main non-free contrib" > /etc/apt/sources.list && \
-    apt-get update && apt-get install -y \
-    iputils-ping \
-    ncat \
-    wget \
-    ca-certificates \
-    libaio-dev \
-    bzip2 \
-    libkeyutils-dev \
-    locales \
-    libnuma-dev \
-    libreadline-dev && \
-    rm -rf /var/lib/apt/lists/*; \
-    groupadd -g 70 omm;  \
-    useradd -u 70 -g omm -m -s /bin/bash omm;  \
-    mkdir -p /var/lib/opengauss && \
-    mkdir -p /usr/local/opengauss && \
-    mkdir -p /var/run/opengauss  && \
-    mkdir /docker-entrypoint-initdb.d && \
-    chown  omm:omm /var/lib/opengauss /home/omm /var/run/opengauss /docker-entrypoint-initdb.d /usr/local/opengauss/ /usr/local/opengauss/lib /usr/local/opengauss/lib/postgresql /usr/local/opengauss/share/postgresql/extension /usr/local/opengauss/bin  && \
-    echo "export GAUSSHOME=/usr/local/opengauss"  >> /home/omm/.profile && \
-    echo "export PATH=\$GAUSSHOME/bin:\$PATH " >> /home/omm/.profile && \
-    echo "export LD_LIBRARY_PATH=\$GAUSSHOME/lib:\$LD_LIBRARY_PATH" >> /home/omm/.profile && \
-    echo "export PGDATA=/var/lib/opengauss/data" >> /home/omm/.profile && \
-    wget -P /usr/local/bin/ https://gitee.com/lee1002/gosu/attach_files/944222/download/gosu-arm64 -O /usr/local/bin/gosu && \
-    chmod +x /usr/local/bin/gosu && \
-    chown omm:omm /home/omm/.bashrc && \
-    sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+        mkdir -p /warehouse/opengauss; \
+        sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list; \
+        sed -i 's/security.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list; \
+        apt-get update && apt-get install --yes --no-install-recommends wget bzip2 ca-certificates; \
+        wget --progress=bar:force:noscroll https://gitee.com/lee1002/gosu/attach_files/944222/download/gosu-arm64 -O /warehouse/gosu && chmod +x /warehouse/gosu; \
+        wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/3.1.0/arm/openGauss-3.1.0-openEuler-64bit.tar.bz2 -O /warehouse/openGauss.tar.bz2; \
+        tar -xjf /warehouse/openGauss.tar.bz2 -C /warehouse/opengauss && rm -f /warehouse/openGauss.tar.bz2 && chmod -R +rx /warehouse/opengauss
 
+FROM debian:10.9-slim
+
+ENV LANG en_US.utf8
 ENV GOSU_VERSION 1.12
+ENV GAUSSLOG /home/omm/pg_log
 ENV PGDATA /var/lib/opengauss/data
 
+RUN set -eux; \
+    sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list; \
+    sed -i 's/security.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list; \
+    apt-get update && apt-get install --yes --no-install-recommends \
+    ncat \
+    bzip2 \
+    locales \
+    iputils-ping \
+    libaio-dev \
+    libkeyutils-dev \
+    libreadline-dev; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/* /tmp/*; \
+    groupadd -g 70 omm; \
+    useradd -u 70 -g omm -m -s /bin/bash omm; \
+    mkdir -p /var/lib/opengauss; \
+    mkdir -p /var/run/opengauss; \
+    mkdir /docker-entrypoint-initdb.d; \
+    chown omm:omm /var/lib/opengauss /home/omm /var/run/opengauss /docker-entrypoint-initdb.d; \
+    echo "export GAUSSLOG=/home/omm/pg_log" >> /home/omm/.profile; \
+    echo "export GAUSSHOME=/usr/local/opengauss" >> /home/omm/.profile; \
+    echo "export PGDATA=/var/lib/opengauss/data" >> /home/omm/.profile; \
+    echo "export PATH=\$GAUSSHOME/bin:\$PATH " >> /home/omm/.profile; \
+    echo "export LD_LIBRARY_PATH=\$GAUSSHOME/lib:\$LD_LIBRARY_PATH" >> /home/omm/.profile; \
+    locale-gen en_US.UTF-8
+
 COPY entrypoint.sh /usr/local/bin/
-RUN chmod 755 /usr/local/bin/entrypoint.sh;ln -s /usr/local/bin/entrypoint.sh / # backwards compat
+COPY --from=warehouse /warehouse/gosu /usr/local/bin/gosu
+COPY --chown=omm:omm --from=warehouse /warehouse/opengauss /usr/local/opengauss
+RUN chmod 755 /usr/local/bin/entrypoint.sh;ln -s /usr/local/bin/entrypoint.sh /
+
 ENTRYPOINT ["entrypoint.sh"]
 EXPOSE 5432
-
 CMD ["gaussdb"]
