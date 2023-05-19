@@ -5,8 +5,8 @@ RUN set -eux; \
         sed -i "s/archive.ubuntu.com/mirrors.ustc.edu.cn/g" /etc/apt/sources.list; \
         sed -i "s/security.ubuntu.com/mirrors.ustc.edu.cn/g" /etc/apt/sources.list; \
         apt-get update && apt-get install --yes --no-install-recommends wget ca-certificates; \
-        wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/3.1.1/x86_openEuler/openGauss-3.1.1-openEuler-64bit.tar.bz2 -O /warehouse/openGauss.tar.bz2; \
-        tar -xjf /warehouse/openGauss.tar.bz2 -C /warehouse/opengauss && rm -f /warehouse/openGauss.tar.bz2 && chmod -R 755 /warehouse/opengauss
+        wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/3.0.3/x86_openEuler/openGauss-3.0.3-openEuler-64bit.tar.bz2 -O /warehouse/openGauss.tar.bz2; \
+        tar -xjf /warehouse/openGauss.tar.bz2 -C /warehouse/opengauss && rm -f /warehouse/openGauss.tar.bz2 && chmod -R +rx /warehouse/opengauss
 
 FROM ubuntu:20.04
 
