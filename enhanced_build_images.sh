@@ -9,7 +9,7 @@ default_arch=`case $(uname -m) in i386)   echo "386" ;; i686)   echo "386" ;; x8
 PLATFORM="$default_platform"
 VERSION="5.0.1"
 IMAGE_NAME="opengauss"
-DOCKER_FILE=
+DOCKER_FILE="Dockerfile"
 IMAGE_PREFIX="docker.io/enmotech"
 BUILD_ARGS=
 LOCAL_IMAGE=
@@ -38,7 +38,7 @@ while true; do
       shift 2
       ;;
     --build-arg)
-      BUILD_ARGS=( ${BUILD_ARGS[*]} "$2" )
+      BUILD_ARGS=( --build-arg ${BUILD_ARGS[*]} "$2" )
       shift 2
       ;;
     --no-merge)
@@ -53,11 +53,6 @@ done
 if [[ "$VERSION" < "5.0.1" ]]; then
   ./buildDockerImage.sh -i -v "$VERSION"
   exit 0
-fi
-
-
-if [[ -z "${DOCKER_FILE}" ]]; then
-  DOCKER_FILE="Dockerfile"
 fi
 
 
@@ -105,7 +100,7 @@ else
     local_image="${LOCAL_IMAGE}:${arch}-${VERSION}"
 
     BUILD_ARGS=( ${BUILD_ARGS[*]} --build-arg TARGETARCH="${default_arch}" )
-    DOCKER_BUILDKIT=1 docker build -t "${LOCAL_IMAGE}" -f "${DOCKER_FILE}" ${BUILD_ARGS[*]} .
+    DOCKER_BUILDKIT=1 docker build -t "${local_image}" -f "${DOCKER_FILE}" ${BUILD_ARGS[*]} .
   else
     echo "platforms not match local and docker client not support buildx"
     exit 1
