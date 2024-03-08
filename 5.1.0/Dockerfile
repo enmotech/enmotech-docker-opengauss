@@ -61,6 +61,7 @@ ARG TARGETARCH
 ENV LANG en_US.utf8
 ENV GAUSSLOG /home/omm/pg_log
 ENV PGDATA /var/lib/opengauss/data
+ENV PGDATABASE postgres
 
 RUN set -eux; \
     apt-get update && apt-get install --yes --no-install-recommends \
