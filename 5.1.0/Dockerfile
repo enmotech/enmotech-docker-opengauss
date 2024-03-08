@@ -1,6 +1,7 @@
 FROM ubuntu:22.04 as builder
 
 ARG TARGETARCH
+ARG SOFTWARE_TYPE="Enterprise-Edition"
 
 WORKDIR /warehouse
 
@@ -23,12 +24,32 @@ RUN set -eux; \
     bzip2 \
     ca-certificates && \
     if [ "$TARGETARCH" = "arm64" ]; then \
-        wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/5.1.0/arm_2203/openGauss-5.1.0-openEuler-64bit-all.tar.gz -O /warehouse/openGauss.tar.bz2; \
+        if [ "$SOFTWARE_TYPE" = "Enterprise-Edition" ]; then \
+            wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/5.1.0/arm_2203/openGauss-5.1.0-openEuler-64bit-all.tar.gz -O /warehouse/openGauss.tar.bz2; \
+            tar xf /warehouse/openGauss.tar.bz2;  \
+            tar xf openGauss-5.1.0-openEuler-64bit.tar.bz2 -C /warehouse/opengauss; \
+        elif [ "$SOFTWARE_TYPE" = "Simplified" ]; then \
+            wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/5.1.0/arm_2203/openGauss-5.1.0-openEuler-64bit.tar.bz2 -O /warehouse/openGauss.tar.bz2; \
+            tar xf openGauss.tar.bz2 -C /warehouse/opengauss; \
+        else \
+            wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/5.1.0/arm_2203/openGauss-Lite-5.1.0-openEuler-aarch64.tar.gz -O /warehouse/openGauss.tar.bz2; \
+             tar xf /warehouse/openGauss.tar.bz2;  \
+             tar xf openGauss-Lite-5.1.0-openEuler-aarch64.bin -C /warehouse/opengauss; \
+        fi \
     elif [ "$TARGETARCH" = "amd64" ]; then \
-      wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/5.1.0/x86_openEuler_2203/openGauss-5.1.0-openEuler-64bit-all.tar.gz -O /warehouse/openGauss.tar.bz2; \
+        if [ "$SOFTWARE_TYPE" = "Enterprise-Edition" ]; then \
+            wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/5.1.0/x86_openEuler_2203/openGauss-5.1.0-openEuler-64bit-all.tar.gz -O /warehouse/openGauss.tar.bz2; \
+            tar xf /warehouse/openGauss.tar.bz2;  \
+            tar xf openGauss-5.1.0-openEuler-64bit.tar.bz2 -C /warehouse/opengauss; \
+        elif [ "$SOFTWARE_TYPE" = "Simplified" ]; then \
+            wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/5.1.0/x86_openEuler_2203/openGauss-5.1.0-openEuler-64bit.tar.bz2 -O /warehouse/openGauss.tar.bz2; \
+            tar xf openGauss.tar.bz2 -C /warehouse/opengauss; \
+        else \
+            wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/5.1.0/x86_openEuler_2203/openGauss-Lite-5.1.0-openEuler-x86_64.tar.gz -O /warehouse/openGauss.tar.bz2; \
+            tar xf /warehouse/openGauss.tar.bz2;  \
+            tar xf openGauss-Lite-5.1.0-openEuler-x86_64.bin -C /warehouse/opengauss; \
+        fi \
     fi && \
-    tar xf /warehouse/openGauss.tar.bz2  && \
-    tar xf openGauss-5.1.0-openEuler-64bit.tar.bz2 -C /warehouse/opengauss && \
     rm -f /warehouse/openGauss.tar.bz2 && chmod -R +rx /warehouse/opengauss
 
 

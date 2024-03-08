@@ -49,6 +49,12 @@ openGauss社区官方网站：[https://opengauss.org/](https://opengauss.org/)
 $ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=Enmo@123 enmotech/opengauss:latest
 ```
 
+如果您想运行opengauss的lite版本，可以执行以下命令：
+
+```console
+$ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=Enmo@123 enmotech/opengauss_lite:latest
+```
+
 ## 环境变量
 为了更灵活的使用openGuass镜像，可以设置额外的参数。未来我们会扩充更多的可控制参数，当前版本支持以下变量的设定。
 
