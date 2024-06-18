@@ -15,6 +15,7 @@
 
 - [`latest`](https://hub.docker.com/layers/enmotech/opengauss/latest/images/sha256-55a0c6300b84fb79034d2f9d9924557a0d040c2d9d33e51f8ae8a1eb097dad1e?context=repo)
 - [`5.1.0`](https://hub.docker.com/layers/enmotech/opengauss/5.1.0/images/sha256-0e57f4bc7352f8c8614d1883a0c4cc9199bf7b35f66ed89d0c62f45841da30bc?context=repo)
+- [`5.0.2`](https://hub.docker.com/layers/enmotech/opengauss/5.0.2/images/sha256-ff72118a989c467c2388bedaf10a3ee2141ca6c3bf9800d04f720da979a1f7fd?context=repo)
 - [`5.0.1`](https://hub.docker.com/layers/enmotech/opengauss/5.0.1/images/sha256-4c294a33fd255b618f4d1549096ab5ae230f759d0213beabf90d099a3dcd9c07?context=repo)
 - [`5.0.0`](https://hub.docker.com/layers/enmotech/opengauss/5.0.0/images/sha256-55a0c6300b84fb79034d2f9d9924557a0d040c2d9d33e51f8ae8a1eb097dad1e?context=repo)
 - [`3.1.1`](https://hub.docker.com/layers/enmotech/opengauss/3.1.1/images/sha256-95a518d150d4d1badcc2e72eae699d5ad82692d90c0c3eed0ec2ab5faec515d6?context=repo)
