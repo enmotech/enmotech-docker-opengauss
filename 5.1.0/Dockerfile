@@ -65,6 +65,9 @@ ENV PGDATABASE postgres
 
 RUN set -eux; \
     apt-get update && apt-get install --yes --no-install-recommends \
+    libltdl7 \
+    tzdata \
+    vim \
     libc6 \
     ncat \
     gosu \

@@ -12,6 +12,7 @@ IMAGE_NAME="opengauss"
 DOCKER_FILE="Dockerfile"
 IMAGE_PREFIX="docker.io/enmotech"
 BUILD_ARGS=
+DRIVER_OPTS=
 LOCAL_IMAGE=
 MERGE=1
 
@@ -38,7 +39,11 @@ while true; do
       shift 2
       ;;
     --build-arg)
-      BUILD_ARGS=( --build-arg ${BUILD_ARGS[*]} "$2" )
+      BUILD_ARGS=( --build-arg "$2" ${BUILD_ARGS[*]} )
+      shift 2
+      ;;
+    --driver-opt)
+      DRIVER_OPTS=( --driver-opt "$2" ${DRIVER_OPTS[*]} )
       shift 2
       ;;
     --no-merge)
@@ -78,7 +83,7 @@ cd "$VERSION" || {
 
 
 if docker buildx version > /dev/null 2>&1; then
-  docker buildx use opengauss_builder || docker buildx create --name opengauss_builder --use --platform="${PLATFORM}"
+  docker buildx use opengauss_builder || docker buildx create --name opengauss_builder ${DRIVER_OPTS[*]} --use --platform="${PLATFORM}"
 
   if [[ "${#PLATFORMS[@]}" -gt 0 ]]; then
     for platform in "${PLATFORMS[@]}"; do
