@@ -25,7 +25,7 @@ RUN set -eux; \
     ca-certificates && \
     if [ "$TARGETARCH" = "arm64" ]; then \
         if [ "$SOFTWARE_TYPE" = "Enterprise-Edition" ]; then \
-            wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/6.0.0/openEuler22.03/arm/openGauss-All-6.0.0-openEuler22.03-aarch64.tar.gz -O /warehouse/openGauss.tar.bz2 \
+            wget --progress=bar:force:noscroll https://opengauss.obs.cn-south-1.myhuaweicloud.com/6.0.0/openEuler22.03/arm/openGauss-All-6.0.0-openEuler22.03-aarch64.tar.gz -O /warehouse/openGauss.tar.bz2; \
             tar xf /warehouse/openGauss.tar.bz2;  \
             tar xf openGauss-Server-6.0.0-openEuler22.03-aarch64.tar.bz2 -C /warehouse/opengauss; \
         elif [ "$SOFTWARE_TYPE" = "Simplified" ]; then \
