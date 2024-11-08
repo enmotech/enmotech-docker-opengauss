@@ -1,96 +1,121 @@
-# 快速参考
-- **维护者**：
-[Enmotech OpenSource Team](https://github.com/enmotech)
-- **容器镜像下载地址**：
-[openGauss dockerhunb Repo](https://hub.docker.com/r/enmotech/opengauss)
-- **哪里可以获取帮助**：
-[墨天轮-openGauss](https://www.modb.pro/openGauss)
+# Quick Reference
 
-# 支持的tags和 `Dockerfile`链接
-- [`latest`](https://hub.docker.com/layers/enmotech/opengauss/latest/images/sha256-0e57f4bc7352f8c8614d1883a0c4cc9199bf7b35f66ed89d0c62f45841da30bc?context=explore)
-- [`5.1.0`](https://hub.docker.com/layers/enmotech/opengauss/5.1.0/images/sha256-0e57f4bc7352f8c8614d1883a0c4cc9199bf7b35f66ed89d0c62f45841da30bc?context=explore)
-- [`5.0.1`](https://hub.docker.com/layers/enmotech/opengauss/5.0.1/images/sha256-4c294a33fd255b618f4d1549096ab5ae230f759d0213beabf90d099a3dcd9c07?context=explore)
-- [`3.1.0`](https://hub.docker.com/layers/enmotech/opengauss/3.1.0/images/sha256-5a2066b554b1da932dfcf093ecf65d198f44be334275b4fcdd1a8e1e12b0c514?context=explore) 
-- [`3.0.0`](https://hub.docker.com/layers/enmotech/opengauss/3.0.0/images/sha256-0b3796639366b63a55f4d524c44e76da9663378a998e2d9dd30dca70755249a3?context=explore)
-- [`2.0.1`](https://hub.docker.com/layers/enmotech/opengauss/2.0.1/images/sha256-e3b18ce17fe43cdfe030d353ff93636d4db8418365b6247a57dfbb280aaee699?context=explore)
+- **Maintainers**:
+  [EnmoTech OpenSource Team](https://github.com/enmotech)
+- **Where to get help**:
+  [Mo Tian Lun-openGauss](https://www.modb.pro/openGauss)
+
+
+
+***If you are attempting to run a container of openGauss version 5.0 or later on macOS or Windows, you should use the [`enmotech/opengauss-lite`](https://hub.docker.com/r/enmotech/opengauss-lite) version. This is because since version 5.0, the openGauss EE container cannot start up properly on macOS or Windows. However, there are no issues when running it on Linux.***
+
+
+
+# Supported Tags and `Dockerfile` Links
+
+- [`latest`](https://hub.docker.com/layers/enmotech/opengauss/latest/images/sha256-55a0c6300b84fb79034d2f9d9924557a0d040c2d9d33e51f8ae8a1eb097dad1e?context=repo)
+- [`5.1.0`](https://hub.docker.com/layers/enmotech/opengauss/5.1.0/images/sha256-0e57f4bc7352f8c8614d1883a0c4cc9199bf7b35f66ed89d0c62f45841da30bc?context=repo)
+- [`5.0.2`](https://hub.docker.com/layers/enmotech/opengauss/5.0.2/images/sha256-ff72118a989c467c2388bedaf10a3ee2141ca6c3bf9800d04f720da979a1f7fd?context=repo)
+- [`5.0.1`](https://hub.docker.com/layers/enmotech/opengauss/5.0.1/images/sha256-4c294a33fd255b618f4d1549096ab5ae230f759d0213beabf90d099a3dcd9c07?context=repo)
+- [`5.0.0`](https://hub.docker.com/layers/enmotech/opengauss/5.0.0/images/sha256-55a0c6300b84fb79034d2f9d9924557a0d040c2d9d33e51f8ae8a1eb097dad1e?context=repo)
+- [`3.1.1`](https://hub.docker.com/layers/enmotech/opengauss/3.1.1/images/sha256-95a518d150d4d1badcc2e72eae699d5ad82692d90c0c3eed0ec2ab5faec515d6?context=repo)
+- [`3.1.0`](https://hub.docker.com/layers/enmotech/opengauss/3.1.0/images/sha256-b2be542351fa26f3e6b3aabe212f470b9dfeaf7350e03e98c83bca77c77320ea?context=repo)
+- [`3.0.3`](https://hub.docker.com/layers/enmotech/opengauss/3.0.3/images/sha256-1608795fb4c376bf1b078adf56e7e8b5e7ee9eaf4c0951fdd85ea3ca19569007?context=repo)
+- [`3.0.0`](https://hub.docker.com/layers/opengauss/enmotech/opengauss/3.0.0/images/sha256-33a4f621386c6dfaa21110e1e0a8d42b16a7231591127f9553d6854cbebc3440?context=explore)
+- [`2.1.0`](https://hub.docker.com/layers/enmotech/opengauss/2.1.0/images/sha256-cd5295251e13f91ba28495f63a93587879843c34e49595caa41f6aab5b689db1?context=explore)
+- [`2.0.1`](https://hub.docker.com/layers/enmotech/opengauss/2.0.1/images/sha256-6484016276f41d600f954313d3498e9db0cc385855dc1aaff6b9da685aa48de1?context=explore)
 - [`2.0.0`](https://hub.docker.com/layers/enmotech/opengauss/2.0.0/images/sha256-2e43ab3306bf0300079726718d8b27304212eca5b49d0be418eec12d4f2ca105?context=explore)
 - [`1.1.0`](https://hub.docker.com/layers/enmotech/opengauss/1.1.0/images/sha256-004bfdb7c883d22b7731e14995c4a4ff1fe254f47cec3ddca088bea2fd133543?context=explore)
 - [`1.0.1`](https://hub.docker.com/layers/enmotech/opengauss/1.0.1/images/sha256-9e82b00802e8bd7a1b78344bbc77cc593303ca0b0c5bbb041192b360a5c89ccf?context=explore)
 - [`1.0.0`](https://hub.docker.com/layers/enmotech/opengauss/1.0.0/images/sha256-07e7a0e0c07df7c9151bd8038883e40546a9705b61b63373ebaf70dbc738c40c?context=explore)
 
+# About openGauss
 
-# 关于openGauss
-openGauss是一款开源关系型数据库管理系统，采用木兰宽松许可证v2发行。openGauss内核早期源自PostgreSQL，深度融合华为在数据库领域多年的经验，结合企业级场景需求，持续构建竞争力特性。同时openGauss也是一个开源、免费的数据库平台，鼓励社区贡献、合作。
+openGauss is an open-source relational database management system released under the Mulan PSL v2 license. The openGauss kernel was originally derived from PostgreSQL and deeply integrates Huawei's extensive experience in the database field, continuously building competitive features tailored to enterprise needs. openGauss is also an open-source, free database platform that encourages community contributions and collaboration.
 
-openGauss社区官方网站：[https://opengauss.org/](https://opengauss.org/)
+openGauss Community Official Website: [https://opengauss.org/](https://opengauss.org/)
 
 ![logo](https://i.loli.net/2020/12/16/4xLt2QGOfcAgzKw.png)
 
-# 云和恩墨openGuass镜像的特点
-* 云和恩墨会最紧密跟踪openGauss的源码变化，第一时间发布镜像的新版本。
-* 云和恩墨的云端数据库，虚拟机数据库以及容器版本数据库均会使用同样的初始化最佳实践配置，这样当您在应对各种不同需求时会有几乎相同的体验。
-* 云和恩墨会持续发布不同CPU架构（x86或者ARM）之上，不同操作系统的各种镜像
+# Features of Enmotech openGauss Image
 
-**目前已经支持x86-64和ARM64两种架构，会根据您获取镜像时运行的机器架构自动判断。**
+* Enmotech closely tracks changes in the openGauss source code and releases new versions of the image promptly.
+* Enmotech's cloud database, virtual machine database, and container version database all use the same best practice initialization configuration, ensuring a nearly identical experience when dealing with various requirements.
+* Enmotech continuously releases various images for different CPU architectures (x86 or ARM) and operating systems.
 
-从2.0版本开始（包括2.0版本）
-- x86-64架构的openGuass运行在[Ubuntu 18.04操作系统](https://ubuntu.com/)中
-- ARM64架构的openGauss运行在[Debian 10 操作系统](https://www.debian.org/)中
+**Currently supports x86-64 and ARM64 architectures, automatically determined based on the machine architecture when obtaining the image.**
 
-在1.1.0版本之前（包括1.1.0版本）
-- x86-64架构的openGuass运行在[CentOS 7.6操作系统](https://www.centos.org/)中
-- ARM64架构的openGauss运行在[openEuler 20.03 LTS操作系统](https://openeuler.org/zh/)中
+From version 5.0 (including 5.0):
 
-# 如何使用本镜像
+- Enterprise edition and Lite edition separated. [`enmotech/opengauss`](https://hub.docker.com/r/enmotech/opengauss/tags) is Enterprise edition, [`enmotech/opengauss-lite`](https://hub.docker.com/r/enmotech/opengauss-lite/tags) is Lite edition.
 
-## 启动openGuass实例
+From version 3.0 (including 3.0):
+
+- The container uses the [openGauss Database Lite version](https://opengauss.org/zh/docs/3.0.0-lite/docs/Releasenotes/%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D.html)
+- Default startup with idle memory less than 200M
+- Added basic commands such as vi, ps, etc.
+
+From version 2.0 (including 2.0):
+
+- openGauss for x86-64 architecture runs on the [Ubuntu 18.04 operating system](https://ubuntu.com/)
+- openGauss for ARM64 architecture runs on the [Debian 10 operating system](https://www.debian.org/)
+
+Before version 1.1.0 (including 1.1.0):
+
+- openGauss for x86-64 architecture runs on the [CentOS 7.6 operating system](https://www.centos.org/)
+- openGauss for ARM64 architecture runs on the [openEuler 20.03 LTS operating system](https://openeuler.org/zh/)
+
+# How to Use This Image
+
+## Start an openGauss Instance
 
 ```console
 $ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=Enmo@123 enmotech/opengauss:latest
 ```
 
-如果您想运行opengauss的lite版本，可以执行以下命令：
+## Environment Variables
 
-```console
-$ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=Enmo@123 enmotech/opengauss_lite:latest
-```
-
-## 环境变量
-为了更灵活的使用openGuass镜像，可以设置额外的参数。未来我们会扩充更多的可控制参数，当前版本支持以下变量的设定。
+To use the openGauss image more flexibly, additional parameters can be set. More controllable parameters will be added in future versions. The current version supports the following variables.
 
 ### `GS_PASSWORD`
-在你使用openGauss镜像的时候，必须设置该参数。该参数值不能为空或者不定义。该参数设置了openGauss数据库的超级用户omm以及测试用户gaussdb的密码。openGauss安装时默认会创建omm超级用户，该用户名暂时无法修改。测试用户gaussdb是在[entrypoint.sh](https://github.com/enmotech/enmotech-docker-opengauss/blob/master/1.0.1/entrypoint.sh)中自定义创建的用户。
 
-openGauss镜像配置了本地信任机制，因此在容器内连接数据库无需密码，但是如果要从容器外部（其它主机或者其它容器）连接则必须要输入密码。
+This parameter must be set when using the openGauss image. The value cannot be empty or undefined. This parameter sets the password for the openGauss database superuser `omm` and the test user `gaussdb`. The `omm` superuser is created by default during openGauss installation and the username cannot be changed at this time. The test user `gaussdb` is a custom-created user in the [entrypoint.sh](https://github.com/enmotech/enmotech-docker-opengauss/blob/master/1.0.1/entrypoint.sh).
 
-**openGauss的密码有复杂度要求，需要：密码长度8个字符及以上，必须同时包含英文字母大小写，数字，以及特殊符号**
+The openGauss image is configured with local trust mechanism, so no password is required to connect to the database within the container. However, if connecting from outside the container (other hosts or other containers), a password must be entered.
+
+**openGauss password complexity requirements: the password must be at least 8 characters long and contain uppercase and lowercase English letters, numbers, and special characters.**
 
 ### `GS_NODENAME`
 
-指定数据库节点名称 默认为gaussdb
+Specifies the database node name. The default is `gaussdb`.
 
 ### `GS_USERNAME`
 
-指定数据库连接用户名 默认为gaussdb
+Specifies the database connection username. The default is `gaussdb`.
 
 ### `GS_PORT`
-指定数据库端口，默认为5432。
 
-## 从容器外部连接容器数据库
-openGauss的默认监听启动在容器内的5432端口上，如果想要从容器外部访问数据库，则需要在`docker run`的时候指定`-p`参数。比如以下命令将允许使用15432端口访问容器数据库。
+Specifies the database port. The default is 5432.
+
+## Connecting to the Container Database from Outside the Container
+
+openGauss listens on port 5432 within the container by default. To access the database from outside the container, specify the `-p` parameter when running `docker run`. For example, the following command allows access to the container database using port 15432.
+
 ```console
 $ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=Secretpassword@123 -p 15432:5432 enmotech/opengauss:latest
 ```
-在上述命令正常启动容器数据库之后，可以通过外部的gsql进行数据库访问。
+
+After successfully starting the container database with the above command, you can access the database using `gsql` from outside.
+
 ```console
 $ gsql -d postgres -U gaussdb -W'Secretpassword@123' -h your-host-ip -p15432
 ```
 
+## Persistent Storage Data
 
-## 持久化存储数据
-容器一旦被删除，容器内的所有数据和配置也均会丢失，而从镜像重新运行一个容器的话，则所有数据又都是呈现在初始化状态，因此对于数据库容器来说，为了防止因为容器的消亡或者损坏导致的数据丢失，需要进行持久化存储数据的操作。通过在`docker run`的时候指定`-v`参数来实现。比如以下命令将会指定将openGauss的所有数据文件存储在宿主机的/enmotech/opengauss下。`-u root`参数用于指定容器启动的时候以root用户执行脚本，否则会遇到没有权限创建数据文件目录的问题。
+Once a container is deleted, all data and configurations within the container will also be lost. If you run a container from the image again, all data will be in the initial state. Therefore, for database containers, to prevent data loss due to the container's demise or damage, persistent storage of data is required. This can be achieved by specifying the `-v` parameter when running `docker run`. For example, the following command will specify storing all data files of openGauss on the host machine at /enmotech/opengauss. The `-u root` parameter is used to specify that the script is executed as the root user when the container starts, otherwise, there will be permission issues in creating the data file directory.
 
-注：如果使用podman，会有目标路径检查，需要预先创建宿主机目标路径。
+Note: If using podman, there will be a target path check, and the target path on the host machine needs to be created in advance.
 
 ```console
 $ mkdir -p /enmotech/opengauss
@@ -99,47 +124,53 @@ $ docker run --name opengauss --privileged=true -d -e GS_PASSWORD=Secretpassword
     enmotech/opengauss:latest
 ```
 
-## 创建主从复制的openGauss容器
-1. 拉取容器镜像
-2. 运行脚本[create_master_slave.sh](https://github.com/enmotech/enmotech-docker-opengauss/blob/master/create_master_slave.sh)，按照提示输入所需参数，或者直接使用默认值，即可自动创建openGauss一主一备架构的两个容器。
+## Create Master-Slave Replication openGauss Container
 
-上述脚本有多个自定义参数，以下为这些参数的参数名称(解释)[默认值]。  
-> OG_SUBNET (容器所在网段) [172.11.0.0/24]  
-GS_PASSWORD (定义数据库密码)[Enmo@123]  
-MASTER_IP (主库IP)[172.11.0.101]  
-SLAVE_1_IP (备库IP)[172.11.0.102]  
-MASTER_HOST_PORT (主库数据库服务端口)[5432]  
-MASTER_LOCAL_PORT (主库通信端口)[5434]  
-SLAVE_1_HOST_PORT (备库数据库服务端口)[6432]  
-SLAVE_1_LOCAL_PORT (备库通信端口)[6434]  
-MASTER_NODENAME (主节点名称)[opengauss_master]  
-SLAVE_NODENAME （备节点名称）[opengauss_slave1]  
+1. Pull the container image
+2. Run the script [create_master_slave.sh](https://github.com/enmotech/enmotech-docker-opengauss/blob/master/create_master_slave.sh), enter the required parameters as prompted, or directly use the default values to automatically create two containers with a one-master-one-slave architecture of openGauss.
 
-### 使用示例
-#### 拉取镜像
+The above script has multiple custom parameters, the following are the parameter names (explanation) [default value].
+
+> `OG_SUBNET` (Container subnet) [172.11.0.0/24]  
+> `GS_PASSWORD` (Define database password) [Enmo@123]  
+> `MASTER_IP` (Master database IP) [172.11.0.101]  
+> `SLAVE_1_IP` (Slave database IP) [172.11.0.102]  
+> `MASTER_HOST_PORT` (Master database service port) [5432]  
+> `MASTER_LOCAL_PORT` (Master communication port) [5434]  
+> `SLAVE_1_HOST_PORT` (Slave database service port) [6432]  
+> `SLAVE_1_LOCAL_PORT` (Slave communication port) [6434]  
+> `MASTER_NODENAME` (Master node name) [opengauss_master]  
+> `SLAVE_NODENAME` (Slave node name) [opengauss_slave1]  
+
+### Usage Example
+
+#### Pull the Image
+
 ```console
 # docker pull enmotech/opengauss:latest
 ```
-#### 获取创建主备容器脚本并运行
+
+#### Get and Run the Script to Create Master-Slave Containers
+
 ```console
 # wget https://raw.githubusercontent.com/enmotech/enmotech-docker-opengauss/master/create_master_slave.sh
 # chmod +x create_master_slave.sh 
 # ./create_master_slave.sh 
-Please input OG_SUBNET (容器所在网段) [172.11.0.0/24]: 
+Please input OG_SUBNET (Container subnet) [172.11.0.0/24]: 
 OG_SUBNET set 172.11.0.0/24
-Please input GS_PASSWORD (定义数据库密码)[Enmo@123]: 
+Please input GS_PASSWORD (Define database password) [Enmo@123]: 
 GS_PASSWORD set Enmo@123
-Please input MASTER_IP (主库IP)[172.11.0.101]: 
+Please input MASTER_IP (Master database IP) [172.11.0.101]: 
 MASTER_IP set 172.11.0.101
-Please input SLAVE_1_IP (备库IP)[172.11.0.102]: 
+Please input SLAVE_1_IP (Slave database IP) [172.11.0.102]: 
 SLAVE_1_IP set 172.11.0.102
-Please input MASTER_HOST_PORT (主库数据库服务端口)[5432]: 
+Please input MASTER_HOST_PORT (Master database service port) [5432]: 
 MASTER_HOST_PORT set 5432
-Please input MASTER_LOCAL_PORT (主库通信端口)[5434]: 
+Please input MASTER_LOCAL_PORT (Master communication port) [5434]: 
 MASTER_LOCAL_PORT set 5434
-Please input SLAVE_1_HOST_PORT (备库数据库服务端口)[6432]: 
+Please input SLAVE_1_HOST_PORT (Slave database service port) [6432]: 
 SLAVE_1_HOST_PORT set 6432
-Please input SLAVE_1_LOCAL_PORT (备库通信端口)[6434]: 
+Please input SLAVE_1_LOCAL_PORT (Slave communication port) [6434]: 
 SLAVE_1_LOCAL_PORT set 6434
 Please input MASTER_NODENAME [opengauss_master]: 
 MASTER_NODENAME set opengauss_master
@@ -156,7 +187,8 @@ bcb688c551b15d34196c249fdf934e4b8140a9181d6dde809c957405ec1ed29a
 OpenGauss Database Slave1 Docker Container created.
 ```
 
-#### 验证主从状态
+#### Verify Master-Slave Status
+
 ```
 # docker exec -it opengauss_master /bin/bash
 # su - omm
@@ -194,8 +226,13 @@ No information
 ```
 
 # License
-Copyright (c) 2011-2021 Enmotech
 
-许可证协议遵循GPL v3.0，你可以从下方获取协议的详细内容。
+Copyright (c) 2011-2024 Enmotech
+
+The license agreement follows GPL v3.0, and you can get the detailed content of the agreement from the link below.
 
     https://github.com/enmotech/enmotech-docker-opengauss/blob/master/LICENSE
+
+# About EnmoTech
+
+EnmoTech is an Intelligent Data Technology provider established in 2011, headquartered in Beijing, with offices covering 35 regions globally including Hong Kong, Singapore and Sydney. Since its inception, EnmoTech has focused continuously on innovating and developing solutions for data and databases. Our range of solutions include HTAP DBMS, software defined distributed storage, database deployment, performance management and intelligent data analytics. More than 3,000 corporate clients with more than 50,000 business systems has been served and managed by EnmoTech. Learn more at www.emotech.com or contact apacmarketing@enmotech.com 
